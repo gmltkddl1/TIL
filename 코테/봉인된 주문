@@ -1,0 +1,68 @@
+import java.util.*;
+
+class Solution {
+    public String solution(long n, String[] bans) {
+        String answer = "";
+        
+        ArrayList<Long> ll = new ArrayList<>();
+        
+        for(int i=0; i<bans.length; i++){
+            String s1 = reverse(bans[i]);
+           
+            long r1 = 0;
+            for(int j=0;j<s1.length();j++){
+        
+                r1 += mul(j) * (s1.charAt(j) - 'a' +1);
+            }
+            
+            
+            ll.add(r1);
+        }
+        Collections.sort(ll);
+        
+        int index=0;
+        while(ll.size() > index) {
+            if(ll.get(index) <= n) {
+                n++;
+            } else {
+                break;
+            }
+            index++;
+        }
+        long temp = n;
+        String result = "";
+        while(temp > 0) {
+            long cur = temp % 26;
+          
+            if(cur == 0) { 
+                result += 'z';
+                          temp=temp/26 -1;
+                         }
+            else {
+                result += (char)(cur + 'a' - 1);
+                temp = temp / 26;
+            }
+            
+        }
+        String reverse = reverse(result);
+    
+        answer = reverse;
+        return answer;
+    }
+    
+    private String reverse(String s) {
+        String reverse = "";
+        for(int i=s.length()-1;i>=0;i--){
+            reverse += s.charAt(i);
+        }
+        return reverse;
+    }
+    
+    private long mul(long a) {
+        long result = 1;
+        for(int i=0;i<a;i++){
+            result *= 26;
+        }
+        return result;
+    }
+}
