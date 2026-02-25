@@ -1,0 +1,191 @@
+import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
+import java.util.regex.*;
+import java.util.stream.*;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
+
+class Result {
+
+    /*
+     * Complete the 'aOrB' function below.
+     *
+     * The function accepts following parameters:
+     *  1. INTEGER k
+     *  2. STRING a
+     *  3. STRING b
+     *  4. STRING c
+     */
+
+    public static void aOrB(int k, String a, String b, String c) {
+        ArrayList<Integer> aList = toBit(a);
+        ArrayList<Integer> bList = toBit(b);
+        ArrayList<Integer> cList = toBit(c);
+        
+        int max = Math.max(aList.size(), bList.size());
+        max = Math.max(max, cList.size());
+        
+        ArrayList<Integer> map = new ArrayList<>();
+        
+        int acount = max - aList.size();
+        for(int i=0;i< acount; i++){
+                aList.add(0);
+        }
+        int bcount = max - bList.size();
+        for(int i=0;i< bcount; i++){
+                bList.add(0);
+        }
+        int ccount = max - cList.size();
+        for(int i=0;i< ccount; i++){
+                cList.add(0);
+        }
+        
+        int count = aList.size();
+        int totalk = 0;
+        for(int i=0;i<count;i++){
+            int avalue = aList.get(i);
+            int bvalue = bList.get(i);
+            int cvalue = cList.get(i);
+            
+            int result = avalue | bvalue;
+            if(result != cvalue) {
+                
+                if(cvalue == 0) {
+                    totalk += avalue + bvalue;
+                    map.add(1);
+                } else {
+                    totalk += 1;
+                    map.add(2);
+                }
+            } else {
+                if(avalue ==1 && bvalue == 1){
+                    map.add(3);
+                } else if(bvalue ==0 && avalue==1) {
+                    map.add(4);
+                } else {
+                    map.add(0);
+                }
+            }
+        }
+        if(totalk > k) {
+            System.out.println(-1);
+            
+        } else {
+        int remain = k;
+        
+        for(int i=0;i<map.size();i++){
+            int index = map.size()-1-i;
+            if(map.get(index)==1){
+                if(aList.get(index)==1){
+                    aList.set(index, 0);
+                    remain--;
+                }
+                if(bList.get(index)==1){
+                    bList.set(index, 0);
+                    remain--;
+                }
+            } else if(map.get(index)==2){
+                bList.set(index, 1);
+                remain--;
+            }
+        }
+        
+        for(int i=0;i<map.size();i++){
+            if(remain <=0) break;
+            int index = map.size()-1-i;
+            if(map.get(index)==3){
+                aList.set(index, 0);
+                remain--;
+                
+            } 
+            else if(map.get(index)==4 && remain >=2){
+                aList.set(index, 0);
+                bList.set(index, 1);
+                remain-=2;
+                
+            } 
+        }
+        
+        
+        System.out.println(toHex(aList));
+        System.out.println(toHex(bList));
+        }
+
+    }
+    
+    private static ArrayList<Integer> toBit(String s) {
+        ArrayList<Integer> result = new ArrayList<>();
+        for (int i=0;i<s.length();i++) {
+            char cur = s.charAt(s.length() - 1 - i);
+            int hex = 0;
+            if(cur >= '0' && cur <= '9') {
+                hex = cur - '0';
+            } else if (cur >= 'A' && cur <= 'F'){
+                hex = cur - 'A' + 10;
+            }
+            for(int j=0;j<4;j++) {
+                result.add((hex >>> j)%2);
+            }
+        }
+        return result;
+    }
+    
+    private static String toHex(ArrayList<Integer> a) {
+        Stack<String> s = new Stack<>();
+        for(int i=0;i<a.size();i+=4){
+            int temp = 0;
+            for(int j=0;j<4;j++){
+                temp += a.get(i+j) << j;
+            }
+            if(temp >=0 && temp <=9) {
+                s.push(String.valueOf((char)(temp + '0')));
+            } else if(temp >= 10 && temp<=15) {
+                s.push(String.valueOf((char)(temp%10 + 'A')));
+            }
+            
+        }
+        String result = "";
+        
+        while(!s.empty()){
+            String t = s.pop();
+            if(result.equals("") && t.equals("0")) continue;
+            result +=t;
+        }
+        
+        if(result.equals("")) result = "0";
+        
+        return result;
+    }
+
+}
+
+public class Solution {
+    public static void main(String[] args) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+
+        int q = Integer.parseInt(bufferedReader.readLine().trim());
+
+        IntStream.range(0, q).forEach(qItr -> {
+            try {
+                int k = Integer.parseInt(bufferedReader.readLine().trim());
+
+                String a = bufferedReader.readLine();
+
+                String b = bufferedReader.readLine();
+
+                String c = bufferedReader.readLine();
+
+                Result.aOrB(k, a, b, c);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        bufferedReader.close();
+    }
+}
