@@ -1,0 +1,33 @@
+Array
+int[] arr = new int[5];
+연속된 메모리 공간에 데이터를 저장
+특정 인덱스 조회/수정은 주소 + (인덱스 * 저장 요소의 크기)로 접근하므로 O(1)
+확장시 새로 할당하고 복사하므로 O(n)
+LinkedList
+링크드 리스트는 데이터와 이전 노드에 대한 참조 다음 노드에 대한 참조를 가지는 node로 구성
+LinkedList는 리스트의 사이즈와 시작노드의 참조 마지막 노드의 참조만을 가진다
+특정 인덱스 조회/수정은 참조를 타고 찾아야하므로 O(n)
+처음과 끝에 데이터 추가/제거시 O(1)
+Stack
+Last in first out
+Stack 보다 ArrayDeque사용을 권장
+push pop 모두 O(1)
+Queue
+First in first out
+LinkedList or ArrayDeque를 큐로 사용
+offer poll O(1)
+Priority Queue
+힙으로 구현
+Array로 구현 인덱스 i의 부모 (i-1)/2 자식 2*i+1, 2*i +2
+offer poll O(logn)
+HashMap
+key에 해쉬 함수를 적용한뒤 버킷 인덱스의 크기로 나눈 나머지를 기준으로 배열에 분배함
+해시 충돌시 linked list에 추가
+조회시 해시함수를 적용하면 바로 인덱스를 알수 있기에 O(1) 
+HashSet
+중복 확인을 위해 사용
+내부적으로 hashmap 사용
+treeset treemap
+red black tree
+정렬순서 유지
+정렬 상태에서 범위 연산에 좋음
