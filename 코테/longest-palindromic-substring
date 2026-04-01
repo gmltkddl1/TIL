@@ -1,0 +1,46 @@
+class Solution {
+    public String longestPalindrome(String s) {
+        
+
+        char[] cl = s.toCharArray();
+        String result = "";
+
+        for(int i=0;i<cl.length;i++){
+            int left = i;
+            int right = i;
+            int turn = 0;
+            while (left >=0 && right < cl.length) {
+                if(cl[left] == cl[right]) {
+                    if(result.length() < right -left +1) {
+                        result = s.substring(left, right+1);
+                        System.out.println(result);
+                    }
+                    left = left -1;
+                    right = right +1;
+                } else {
+                    break;
+                }
+            }
+        }
+
+        for(int i=0;i<cl.length;i++){
+            int left = i;
+            int right = i + 1;
+            int turn = 0;
+            while (left >=0 && right < cl.length) {
+                if(cl[left] == cl[right]) {
+                    if(result.length() < right -left +1) {
+                        result = s.substring(left, right+1);
+                        System.out.println(result);
+                    }
+                    left = left -1;
+                    right = right +1;
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+}
