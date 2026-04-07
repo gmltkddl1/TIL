@@ -1,0 +1,39 @@
+class Solution {
+    public int reverse(int x) {
+        int cur = x;
+        boolean isMinus = (x < 0);
+
+        List<Integer> result = new ArrayList<>();
+
+        while(cur != 0) {
+            int pl = cur % 10 * (isMinus ? -1 : 1);
+            cur/=10;
+            if(pl == 0 && result.isEmpty()){
+                continue;
+            }
+            result.add(pl);
+        }
+        int resultInt = 0;
+        for(int i : result) {
+            if((resultInt > Integer.MAX_VALUE / 10 && !isMinus) || (resultInt > Integer.MIN_VALUE /10 * -1 && isMinus)) return 0;
+            resultInt = resultInt*10 + i;
+        }
+        resultInt = isMinus ? resultInt * -1 : resultInt;
+        return resultInt;
+    }
+
+    boolean compare(List<Integer> a, List<Integer> b) {
+        if(a.size() > b.size()) {
+            return true;
+        } else if(a.size() < b.size()) {
+            return false;
+        } else {
+            for(int i=0;i<a.size(); i++){
+                if(a.get(i) == b.get(i)) continue;
+                if(a.get(i) > b.get(i)) return true;
+                if(a.get(i) < b.get(i)) return false;
+            }
+        }
+        return false;
+    }
+}
