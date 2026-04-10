@@ -10,3 +10,5 @@ MySQL의 경우 세컨더리 인덱스가 리프노드에 PK값을 저장
 세컨더리 인덱스로 조회하게되면 Clustered index를 조회하고 데이터를 조회하는 더블 룩업이 발생
 PostgreSQL의 경우 세컨더리 인덱스도 ctid를 가지고 있음
 
+MySQL은 업데이트시 클러스터드 인덱스의 테이블을 직접 수정하지만
+PostgreSQL은 UPDATE가 DELETE & INSERT이기 떄문에 이를 정리하는 VACUUM이 필요
