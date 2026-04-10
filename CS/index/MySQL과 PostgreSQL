@@ -1,0 +1,12 @@
+MySQL은 테이블 그 자체가 B+ tree이고 이를 Clustered index이다
+PK를 기준으로 B+ tree를 만들고 리프노드에는 전체 데이터를 저장 즉 테이블 = 인덱스
+PK가 없으면 내부적으로 6바이트 로우 아이디를 생성해서 인덱스를 구성함
+
+PostgreSQL은 heap 메모리에 데이터를 저장한다
+PK인덱스는 B+ tree이고 리프노드에는 ctid가 들어간다
+PK의 사이즈가 
+
+MySQL의 경우 세컨더리 인덱스가 리프노드에 PK값을 저장
+세컨더리 인덱스로 조회하게되면 Clustered index를 조회하고 데이터를 조회하는 더블 룩업이 발생
+PostgreSQL의 경우 세컨더리 인덱스도 ctid를 가지고 있음
+
