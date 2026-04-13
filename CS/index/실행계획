@@ -1,0 +1,31 @@
+실행계획
+실행계획은 EXPLAIN 명령어로 실행하며 옵티마이저가 해당 쿼리는 어떻게 실행할 것인지 보여주는 것
+
+MySQL
+EXPLAIN 결과 컬럼: id, select_type, table, partition, type, possible_keys, key ,key_len, ref, rows, filtered, Extra
+* type: 테이블에 어떻게 접근하는지 나타낸다 (system > const > eq_ref > ref > range > index > all)
+   * const: PK나 유니크 인덱스로 정확히 한행을 찾는 경우 옵티마이저가 실행전에 1건이라고 확신할수 있어야함
+   * eq_ref: 조인시 대상이 PK나 유니크 인덱스여서 행 당 하나씩 찾는 경우
+   * ref: 비유니크 인덱스를 사용하여  = 조회
+   * range: 인덱스를 범위로 조회 (<, >, BETWEEN)
+   * index:  인덱스 전체 스캔
+   * ALL:  table full scan
+* key: 실제로 선택된 인덱스
+* possible_keys: 가능한 인덱스의 후보 옵티마이저는 이 중 최적을 선택
+* key_len: 인덱스에서 사용된 크기 복합 인덱스에서 어디까지 사용했는지 확인하는데 사용
+* rows: 옵티마이저가 예상하는 검사 대상 갯수
+* extra: 추가적인 정보를 나타냄 
+   * Using index: 커버링 인덱스가 적용되어 실제 테이블을 조회하지 않음
+   * Using where: 인덱스에서 가져온 행을 다시 where절 조건으로 필터링함 인덱스가 전체 조건을 커버하지 못함
+   * Using file sort: 인덱스의 정렬 조건을 활용하지 못함 즉 인덱스가 없는 조건으로 정렬을 수행시 발생
+   * Using tempoary: 임시 테이블이 생성되었다는 것으로 인덱스가 없는 조건으로 group by 수행시 발생
+
+EXPLAIN ANALYZE
+실제로 쿼리를 실행하고 예측치와 실측치를 보여주고 실제 실행 과정을 보여준다
+
+PostgreSQL
+EXPLAIN의 결과는 트리 형태로 출력
+Index Only Scan: Using index 처럼 커버링 인덱스가 적용되는 경우
+Index Scan: 인덱스를 이용해서 heap 데이터 찾기
+Bitmap Index Scan + Bitmap Heap Scan: 인덱스에서 대상을 비트맵에 모은뒤 힙에서 페이지 단위로 읽는 방식
+Seq Scan: Full Scan
